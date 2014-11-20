@@ -7,7 +7,7 @@ class Vetting
   def self.vet(reviews)
     reviews.each do |review|
 
-      if review.text =~ /elderberry|hamster|php|brainfuck/i
+      if review.text =~ /#{bad_words.join("|")}/i
         review.rejection_reason = "Sorry you can't use bad language"
 
       elsif word_count(review.text) >= REPETITION_LIMIT
@@ -37,6 +37,10 @@ class Vetting
 
     def self.contains_price?(text)
       text =~ /£\s?\d+(\.[\d]{2})?/
+    end
+
+    def self.bad_words
+      File.read(File.expand_path("./review/bad_words.txt", File.dirname(__FILE__))).split("\n")
     end
 
 end
